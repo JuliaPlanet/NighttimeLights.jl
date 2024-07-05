@@ -16,6 +16,40 @@ function sort_files_by_date(folder_path, start_date=Date(0), end_date=Date(today
     # Return the sorted files and their corresponding dates
     return files, dates
 end
+
+"""
+readnl(date::Date; rad_path = "/mnt/giant-disk/nighttimelights/monthly/rad/", cf_path = "/mnt/giant-disk/nighttimelights/monthly/cf/")
+
+This function reads and loads two raster files based on a specified date. It assumes the filenames within the provided paths contain a date string in a specific format (defined by the `sort_files_by_date` function) and uses that information to identify the appropriate files for the given date.
+
+**Arguments:**
+
+* `date`: A `Date` object specifying the date for which to read the rasters.
+* `rad_path` (Optional, default: "/mnt/giant-disk/nighttimelights/monthly/rad/"): The path to the directory containing the radiance data files.
+* `cf_path` (Optional, default: "/mnt/giant-disk/nighttimelights/monthly/cf/"): The path to the directory containing the cloud fraction data files.
+
+**Return Value:**
+
+A tuple containing two `Raster` objects:
+
+* The first element is a `Raster` object loaded from the radiance data file corresponding to the provided date.
+* The second element is a `Raster` object loaded from the cloud fraction data file corresponding to the provided date.
+
+**Example Usage:**
+
+```julia
+# Assuming sort_files_by_date is defined elsewhere
+today = Date(year(), month())
+rad_data, cf_data = readnl(today)
+"""
+function readnl(date::Date; rad_path =  "/mnt/giant-disk/nighttimelights/monthly/rad/", cf_path = "/mnt/giant-disk/nighttimelights/monthly/cf/")
+    rad_files, sorted_dates = sort_files_by_date(rad_path, date, date)
+    cf_files, sorted_dates = sort_files_by_date(cf_path, date, date)
+    rad_raster = Raster(rad_path .* rad_files[1])
+    cf_raster = Raster(cf_path .* cf_files[1])
+    return rad_raster, cf_raster
+end
+
 """
     readnl(xlims = X(Rasters.Between(65.39, 99.94)), ylims = Y(Rasters.Between(5.34, 39.27)), start_date = Date(2012, 04), end_date = Date(2023, 01))
 
