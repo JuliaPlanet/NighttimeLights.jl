@@ -45,8 +45,8 @@ rad_data, cf_data = readnl(today)
 function readnl(date::Date; rad_path =  "/mnt/giant-disk/nighttimelights/monthly/rad/", cf_path = "/mnt/giant-disk/nighttimelights/monthly/cf/")
     rad_files, sorted_dates = sort_files_by_date(rad_path, date, date)
     cf_files, sorted_dates = sort_files_by_date(cf_path, date, date)
-    rad_raster = Raster(rad_path .* rad_files[1])
-    cf_raster = Raster(cf_path .* cf_files[1])
+    rad_raster = Raster(rad_path .* rad_files[1], lazy = true)
+    cf_raster = Raster(cf_path .* cf_files[1], lazy = true)
     return rad_raster, cf_raster
 end
 
